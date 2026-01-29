@@ -1,0 +1,2813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>AI Avatar Training | CyberHopeAI</title>
+    <meta name="description" content="Free hands-on workshop: Create your own AI avatar that sees, hears, and responds in real-time. Hosted by CyberHopeAI, a Google for Startups company in Indianapolis.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://skilldna.cyberhopeai.com/images/skilldna_logo.png">
+
+    <!-- Google Fonts: Match SkillDNA -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aitraining.cyberhopeai.com/">
+    <meta property="og:title" content="Clone Yourself as a Digital Twin — Free AI Workshop">
+    <meta property="og:description" content="Free hands-on workshop in Indianapolis: Create your own AI avatar that sees, hears, and responds in real-time. Hosted by CyberHopeAI, a Google for Startups company.">
+
+    <style>
+        /* ============================================
+           CyberHopeAI Design System (SkillDNA Match)
+           ============================================ */
+
+        :root {
+            /* Background colors */
+            --bg-deepest: #050508;
+            --bg-deep: #0a0a0f;
+            --bg-dark: #0d0d18;
+            --bg-card: #131423;
+            --bg-card-hover: #1a1a28;
+
+            /* Brand colors */
+            --cyan: #00c8c8;
+            --cyan-light: #00d2ef;
+            --cyan-dark: #00b7d7;
+            --magenta: #f32aa4;
+            --magenta-light: #f6339a;
+            --orange: #f99c00;
+            --orange-dark: #e79d00;
+            --green: #00c758;
+            --green-dark: #00bb7b;
+            --purple: #ac4bff;
+
+            /* Text colors */
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #6b6b7b;
+
+            /* Borders */
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-accent: rgba(0, 200, 200, 0.3);
+
+            /* Gradients */
+            --gradient-brand: linear-gradient(135deg, #00c8c8, #f32aa4 50%, #e79d00);
+            --gradient-card: linear-gradient(135deg, #131423cc, #090a1399);
+            --gradient-glow: linear-gradient(135deg, rgba(0, 200, 200, 0.15), rgba(243, 42, 164, 0.1), rgba(247, 157, 0, 0.05));
+
+            /* Shadows */
+            --glow-cyan: 0 0 40px rgba(0, 200, 200, 0.2);
+            --glow-magenta: 0 0 40px rgba(243, 42, 164, 0.2);
+
+            /* Radius */
+            --radius-sm: 0.5rem;
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.5rem;
+        }
+
+        /* Reset & Base */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 400;
+            background: var(--bg-deepest);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: var(--gradient-brand);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background-image:
+                linear-gradient(rgba(0, 200, 200, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 200, 200, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background:
+                radial-gradient(ellipse at 20% 0%, rgba(0, 200, 200, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(243, 42, 164, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 80%, rgba(247, 157, 0, 0.06) 0%, transparent 50%);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* ============================================
+           Navigation
+           ============================================ */
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 0;
+            background: rgba(5, 5, 8, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .nav-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-logo span {
+            background: var(--gradient-brand);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            background: var(--gradient-brand);
+            color: var(--bg-deepest);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-cyan);
+        }
+
+        /* Secondary Nav Links */
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .nav-link:hover {
+            color: var(--cyan);
+        }
+
+        .nav-link .nav-icon {
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Partner Strip */
+        .partner-strip {
+            background: var(--bg-dark);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0.75rem 0;
+            margin-top: 60px;
+        }
+
+        .partner-strip-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .partner-strip-label {
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .partner-strip-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .partner-strip-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            padding: 0.375rem 0.75rem;
+            border-radius: var(--radius-sm);
+            transition: all 0.3s ease;
+        }
+
+        .partner-strip-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .partner-strip-link .link-icon {
+            font-size: 1rem;
+        }
+
+        .partner-strip-link.highlight {
+            color: var(--green);
+        }
+
+        .partner-strip-link.highlight:hover {
+            background: rgba(0, 199, 88, 0.1);
+        }
+
+        /* ============================================
+           Video Showcase Section
+           ============================================ */
+
+        .video-showcase {
+            padding: 5rem 0;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(0, 200, 200, 0.03) 50%, var(--bg-primary) 100%);
+        }
+
+        .video-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .video-badge {
+            display: inline-block;
+            padding: 0.5rem 1.25rem;
+            background: linear-gradient(90deg, rgba(0, 200, 200, 0.15), rgba(243, 42, 164, 0.15));
+            border: 1px solid rgba(0, 200, 200, 0.3);
+            border-radius: 2rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--cyan);
+            margin-bottom: 1.5rem;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 200, 200, 0.2); }
+            50% { box-shadow: 0 0 20px rgba(0, 200, 200, 0.4); }
+        }
+
+        .video-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .video-header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .video-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: var(--radius-lg);
+            border: 2px solid rgba(0, 200, 200, 0.3);
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                0 0 40px rgba(0, 200, 200, 0.15),
+                inset 0 0 60px rgba(0, 0, 0, 0.2);
+            background: var(--bg-secondary);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: var(--radius-lg);
+        }
+
+        .video-caption {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .caption-icon {
+            color: var(--cyan);
+            font-size: 0.8rem;
+        }
+
+        .video-caption strong {
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           HeyGen Partnership Banner
+           ============================================ */
+
+        .heygen-banner {
+            background: linear-gradient(90deg, rgba(0, 200, 200, 0.05), rgba(102, 126, 234, 0.08), rgba(0, 200, 200, 0.05));
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 4rem 0;
+            margin-top: 4rem;
+        }
+
+        .heygen-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .heygen-logo-section {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .heygen-logo {
+            height: 50px;
+            width: auto;
+        }
+
+        .ambassador-badge-img {
+            height: 100px;
+            width: auto;
+            border-radius: var(--radius-md);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .partnership-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(102, 126, 234, 0.15);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .partnership-badge .verified {
+            color: var(--green);
+        }
+
+        .heygen-info {
+            max-width: 500px;
+        }
+
+        .heygen-info h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .heygen-info p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .heygen-info a {
+            color: var(--cyan);
+            text-decoration: none;
+        }
+
+        .heygen-info a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .heygen-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+
+            .heygen-logo-section {
+                flex-direction: column;
+            }
+        }
+
+        /* ============================================
+           Hero Section
+           ============================================ */
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 10rem 0 4rem;
+            position: relative;
+        }
+
+        /* PrecognitionOS Section */
+        .pcos-section {
+            background: linear-gradient(135deg, rgba(0, 200, 200, 0.05), rgba(172, 75, 255, 0.03));
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .pcos-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .pcos-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        .pcos-visual {
+            position: relative;
+        }
+
+        .pcos-diagram {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .pcos-diagram .diagram-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+
+        .pcos-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .pcos-layer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .pcos-layer:hover {
+            border-color: var(--cyan);
+            transform: translateX(4px);
+        }
+
+        .pcos-layer .layer-icon {
+            font-size: 1.25rem;
+        }
+
+        .pcos-layer.highlight {
+            background: linear-gradient(135deg, rgba(0, 200, 200, 0.1), rgba(172, 75, 255, 0.1));
+            border-color: var(--cyan);
+        }
+
+        .pcos-content h2 {
+            font-size: 2.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pcos-content .tech-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(172, 75, 255, 0.15);
+            border: 1px solid rgba(172, 75, 255, 0.3);
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--purple);
+            margin-bottom: 1.5rem;
+        }
+
+        .pcos-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .pcos-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .pcos-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--bg-dark);
+            border-radius: var(--radius-md);
+        }
+
+        .pcos-feature .feature-icon {
+            color: var(--cyan);
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .pcos-feature .feature-text {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .pcos-feature .feature-text strong {
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 0.125rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.75rem;
+            border-radius: var(--radius-md);
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-brand);
+            color: var(--bg-deepest);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-cyan);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--cyan);
+            background: rgba(0, 200, 200, 0.05);
+        }
+
+        /* Stats bar */
+        .stats-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-subtle);
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--cyan);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* ============================================
+           Sections
+           ============================================ */
+
+        section {
+            padding: 6rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--cyan);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+        }
+
+        .section-label::before,
+        .section-label::after {
+            content: '';
+            width: 2rem;
+            height: 1px;
+            background: var(--border-accent);
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+        }
+
+        /* ============================================
+           Cards
+           ============================================ */
+
+        .card {
+            background: var(--gradient-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-brand);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--border-accent);
+            transform: translateY(-4px);
+            box-shadow: var(--glow-cyan);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+        }
+
+        /* Grid layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* ============================================
+           Avatar Showcase
+           ============================================ */
+
+        .avatar-showcase {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 900px) {
+            .avatar-showcase {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .avatar-showcase {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .avatar-card {
+            position: relative;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            aspect-ratio: 16/10;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            transition: all 0.4s ease;
+        }
+
+        .avatar-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--cyan);
+            box-shadow: var(--glow-cyan);
+        }
+
+        .avatar-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .avatar-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .avatar-card .avatar-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 1rem 1rem;
+            background: linear-gradient(transparent, rgba(5, 5, 8, 0.95));
+        }
+
+        .avatar-card .avatar-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .avatar-card .avatar-role {
+            font-size: 0.75rem;
+            color: var(--cyan);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .avatar-card .live-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            background: rgba(0, 199, 88, 0.2);
+            border: 1px solid var(--green);
+            border-radius: 2rem;
+            font-size: 0.625rem;
+            font-weight: 600;
+            color: var(--green);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .avatar-card .live-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* ============================================
+           Partner Section (Hope Training Academy)
+           ============================================ */
+
+        .partner-section {
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-deep) 100%);
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 5rem 0;
+        }
+
+        .partner-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .partner-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .partner-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        .partner-main {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .partner-main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--orange), var(--magenta));
+        }
+
+        .partner-main .partner-logo-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .partner-main .partner-icon {
+            font-size: 2.5rem;
+        }
+
+        .partner-main h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .partner-main .nonprofit-badge {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.625rem;
+            color: var(--green);
+            background: rgba(0, 199, 88, 0.1);
+            border: 1px solid rgba(0, 199, 88, 0.3);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .partner-main p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .partner-main strong {
+            color: var(--text-primary);
+        }
+
+        .partner-programs {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .partner-programs h4 {
+            font-size: 0.875rem;
+            color: var(--cyan);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .program-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .program-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.5rem 0.875rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .program-tag:hover {
+            border-color: var(--cyan);
+            color: var(--text-primary);
+        }
+
+        .program-tag .tag-icon {
+            font-size: 0.875rem;
+        }
+
+        .partner-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            padding: 0.75rem 1.25rem;
+            background: linear-gradient(135deg, var(--orange), var(--magenta));
+            color: var(--bg-deepest);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: all 0.3s ease;
+        }
+
+        .partner-link-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(249, 156, 0, 0.3);
+        }
+
+        /* VIP Benefits Card */
+        .vip-benefits {
+            background: linear-gradient(135deg, rgba(0, 200, 200, 0.08), rgba(243, 42, 164, 0.05));
+            border: 1px solid var(--border-accent);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+        }
+
+        .vip-benefits .vip-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--cyan), var(--magenta));
+            color: var(--bg-deepest);
+            font-weight: 700;
+            font-size: 0.75rem;
+            border-radius: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+
+        .vip-benefits h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .vip-benefits p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .vip-perks {
+            list-style: none;
+        }
+
+        .vip-perks li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+        }
+
+        .vip-perks li:last-child {
+            border-bottom: none;
+        }
+
+        .vip-perks .perk-icon {
+            color: var(--cyan);
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .vip-perks strong {
+            color: var(--text-primary);
+        }
+
+        /* High School Callout */
+        .hs-callout {
+            margin-top: 2rem;
+            padding: 1.25rem;
+            background: rgba(0, 199, 88, 0.08);
+            border: 1px solid rgba(0, 199, 88, 0.2);
+            border-radius: var(--radius-md);
+        }
+
+        .hs-callout .callout-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--green);
+            margin-bottom: 0.5rem;
+        }
+
+        .hs-callout p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .hs-callout a {
+            color: var(--green);
+            text-decoration: underline;
+        }
+
+        /* CSA Program Callout */
+        .csa-callout {
+            margin-top: 3rem;
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(172, 75, 255, 0.08));
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 0;
+        }
+
+        @media (max-width: 900px) {
+            .csa-callout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .csa-image {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .csa-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            min-height: 400px;
+        }
+
+        .csa-content {
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .csa-content .csa-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--purple), var(--magenta));
+            color: white;
+            font-weight: 700;
+            font-size: 0.6875rem;
+            border-radius: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.25rem;
+            width: fit-content;
+        }
+
+        .csa-content h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .csa-content h3 .highlight {
+            color: var(--green);
+        }
+
+        .csa-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .csa-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .csa-feature {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.5rem 0.875rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .csa-feature .icon {
+            color: var(--purple);
+        }
+
+        .csa-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, var(--purple), var(--magenta));
+            color: white;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: all 0.3s ease;
+            width: fit-content;
+        }
+
+        .csa-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(172, 75, 255, 0.4);
+        }
+
+        /* 2 Kites Section */
+        .kites-section {
+            background: linear-gradient(135deg, rgba(249, 156, 0, 0.05), rgba(243, 42, 164, 0.03));
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .kites-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .kites-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        .kites-content h2 {
+            font-size: 2.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .kites-content .kites-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(249, 156, 0, 0.15);
+            border: 1px solid rgba(249, 156, 0, 0.3);
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--orange);
+            margin-bottom: 1.5rem;
+        }
+
+        .kites-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .kites-benefits {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .kites-benefits li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .kites-benefits li:last-child {
+            border-bottom: none;
+        }
+
+        .kites-benefits .benefit-icon {
+            color: var(--orange);
+            font-size: 1.125rem;
+            flex-shrink: 0;
+        }
+
+        .kites-benefits strong {
+            color: var(--text-primary);
+        }
+
+        .kites-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .kites-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .kites-card:hover {
+            border-color: var(--orange);
+            transform: translateX(4px);
+        }
+
+        .kites-card .card-icon {
+            font-size: 2rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-dark);
+            border-radius: var(--radius-md);
+            flex-shrink: 0;
+        }
+
+        .kites-card h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .kites-card p {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .kites-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, var(--orange), var(--magenta));
+            color: var(--bg-deepest);
+            font-weight: 600;
+            font-size: 0.9375rem;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .kites-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(249, 156, 0, 0.4);
+        }
+
+        /* ============================================
+           What You'll Learn
+           ============================================ */
+
+        .learn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .learn-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            transition: all 0.3s ease;
+        }
+
+        .learn-item:hover {
+            border-color: var(--border-accent);
+        }
+
+        .learn-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: var(--cyan);
+            background: rgba(0, 200, 200, 0.1);
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+            flex-shrink: 0;
+        }
+
+        .learn-content h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .learn-content p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* ============================================
+           Event Details
+           ============================================ */
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+        }
+
+        .detail-card {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+        }
+
+        .detail-icon {
+            font-size: 1.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .detail-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.625rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .detail-value.highlight {
+            color: var(--green);
+        }
+
+        /* ============================================
+           Audience Section
+           ============================================ */
+
+        .audience-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .audience-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            transition: all 0.3s ease;
+        }
+
+        .audience-item:hover {
+            border-color: var(--cyan);
+            background: rgba(0, 200, 200, 0.03);
+        }
+
+        .audience-check {
+            color: var(--cyan);
+            font-weight: 600;
+        }
+
+        /* ============================================
+           About Section
+           ============================================ */
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        .about-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .about-content strong {
+            color: var(--text-primary);
+        }
+
+        .credentials-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+
+        .credential-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+        }
+
+        .about-visual {
+            position: relative;
+        }
+
+        .about-card {
+            background: var(--gradient-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .about-card .icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .about-card .tagline {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .about-card .tagline strong {
+            color: var(--cyan);
+        }
+
+        /* ============================================
+           Registration Form
+           ============================================ */
+
+        .form-section {
+            background: var(--bg-dark);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-brand);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-group label .required {
+            color: var(--magenta);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.875rem 1rem;
+            background: var(--bg-deepest);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 3px rgba(0, 200, 200, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-group select {
+            cursor: pointer;
+        }
+
+        .calendar-embed {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: var(--bg-deepest);
+            border: 1px dashed var(--border-subtle);
+            border-radius: var(--radius-lg);
+            text-align: center;
+        }
+
+        .calendar-embed p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .form-submit {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .form-submit .btn {
+            width: 100%;
+            max-width: 400px;
+            justify-content: center;
+            padding: 1.125rem 2rem;
+            font-size: 1.0625rem;
+        }
+
+        .form-note {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        .form-note svg {
+            width: 14px;
+            height: 14px;
+            vertical-align: middle;
+            margin-right: 0.25rem;
+        }
+
+        /* ============================================
+           FAQ
+           ============================================ */
+
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1.5rem 0;
+        }
+
+        .faq-question {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1.0625rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .faq-answer {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+        }
+
+        /* ============================================
+           Footer CTA
+           ============================================ */
+
+        .footer-cta {
+            text-align: center;
+            padding: 8rem 0;
+            position: relative;
+        }
+
+        .footer-cta::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, rgba(0, 200, 200, 0.03));
+            pointer-events: none;
+        }
+
+        .footer-cta h2 {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            margin-bottom: 1rem;
+        }
+
+        .footer-cta p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+        }
+
+        /* ============================================
+           Footer
+           ============================================ */
+
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .footer-logo span {
+            background: var(--gradient-brand);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--cyan);
+        }
+
+        .footer-copyright {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        /* ============================================
+           Animations
+           ============================================ */
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============================================
+           Responsive
+           ============================================ */
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 6rem 0 3rem;
+            }
+
+            section {
+                padding: 4rem 0;
+            }
+
+            .stats-bar {
+                gap: 1.5rem;
+            }
+
+            .form-section {
+                padding: 2rem 1.5rem;
+            }
+
+            .nav-cta span {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container nav-content">
+            <a href="/" class="nav-logo">Cyber<span>Hope</span>AI</a>
+
+            <a href="#register" class="nav-cta">
+                <span>Register Free</span> →
+            </a>
+        </div>
+    </nav>
+
+    <!-- Partner Strip - Links to sections within page -->
+    <div class="partner-strip">
+        <div class="container">
+            <div class="partner-strip-content">
+                <span class="partner-strip-label">Learn More Below:</span>
+                <div class="partner-strip-links">
+                    <a href="#hta" class="partner-strip-link">
+                        <span class="link-icon">🎓</span> Hope Training Academy
+                    </a>
+                    <a href="#csa" class="partner-strip-link highlight">
+                        <span class="link-icon">🎒</span> FREE HS CyberSecurity
+                    </a>
+                    <a href="#pcos" class="partner-strip-link">
+                        <span class="link-icon">🧠</span> PrecognitionOS / SkillDNA
+                    </a>
+                    <a href="#2kites" class="partner-strip-link">
+                        <span class="link-icon">🪁</span> 2 Kites Apprenticeships
+                    </a>
+                    <a href="#faq" class="partner-strip-link">
+                        <span class="link-icon">❓</span> FAQ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                <span>Google for Startups</span>
+                <span style="color: var(--text-muted)">•</span>
+                <span>Indianapolis, IN</span>
+            </div>
+
+            <h1>
+                <span class="gradient-text">Clone Yourself</span><br>
+                as a Digital Twin
+            </h1>
+
+            <p class="hero-subtitle">
+                Free hands-on lab: Create your own AI avatar that sees, hears, and responds in real-time.
+                Learn the technology reshaping sales, marketing, and customer experience.
+            </p>
+
+            <div class="hero-cta">
+                <a href="#register" class="btn btn-primary">
+                    Reserve Your Free Spot →
+                </a>
+                <a href="#learn" class="btn btn-secondary">
+                    What You'll Learn
+                </a>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-value">60</span>
+                    <span class="stat-label">Minutes Hands-On</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">FREE</span>
+                    <span class="stat-label">No Cost to Attend</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">HeyGen</span>
+                    <span class="stat-label">Official Ambassador</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">Live</span>
+                    <span class="stat-label">AI Avatar Demo</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Showcase -->
+    <section class="video-showcase">
+        <div class="container">
+            <div class="video-header">
+                <span class="video-badge">🎬 See AI Avatars in Action</span>
+                <h2>Watch Our <span class="gradient-text">Intelligent Avatars</span></h2>
+                <p>This is what you'll experience at the workshop — AI that sees, hears, and responds in real-time.</p>
+            </div>
+            <div class="video-wrapper">
+                <div class="video-container">
+                    <iframe
+                        src="https://player.vimeo.com/video/1153248567?h=a2ce3c7934&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                        frameborder="0"
+                        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        title="AI Avatar Demo by CyberHopeAI">
+                    </iframe>
+                </div>
+                <p class="video-caption">
+                    <span class="caption-icon">▶</span>
+                    <strong>Quick preview:</strong> See how our AI avatars engage in real conversation
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- HeyGen Partnership Banner -->
+    <section class="heygen-banner">
+        <div class="container">
+            <div class="heygen-content">
+                <div class="heygen-logo-section">
+                    <!-- Official HeyGen Logo -->
+                    <img src="images/heygen-logo.png" alt="HeyGen" class="heygen-logo">
+                    <img src="images/heygen-ambassador.jpeg" alt="HeyGen Ambassador 2026" class="ambassador-badge-img">
+                </div>
+
+                <div class="heygen-info">
+                    <h3>In Partnership with HeyGen</h3>
+                    <p>
+                        <a href="https://heygen.com" target="_blank" rel="noopener">HeyGen</a> is the world's leading AI avatar platform,
+                        trusted by Fortune 500 companies for sales, marketing, and customer engagement.
+                        As an officially appointed <strong>HeyGen Ambassador</strong>, CyberHopeAI brings you exclusive hands-on training
+                        with this groundbreaking technology.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Avatar Showcase -->
+    <section id="avatars">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">What Are AI Avatars?</span>
+                <h2>Meet Your <span class="gradient-text">Digital Twins</span></h2>
+                <p>AI avatars are photorealistic digital humans that can see you, hear you, and respond in real-time. They're not chatbots — they're the future of human-computer interaction.</p>
+            </div>
+
+            <div class="avatar-showcase">
+                <!-- Avatar 1: Sales & Marketing -->
+                <div class="avatar-card">
+                    <img src="avatars/avatar-1.png" alt="HeyGen AI Avatar - Sales & Marketing">
+                    <div class="live-badge">HeyGen</div>
+                    <div class="avatar-overlay">
+                        <div class="avatar-name">Sales & Marketing</div>
+                        <div class="avatar-role">Engage customers 24/7</div>
+                    </div>
+                </div>
+
+                <!-- Avatar 2: Business Professional -->
+                <div class="avatar-card">
+                    <img src="avatars/avatar-2.png" alt="HeyGen AI Avatar - Business Professional">
+                    <div class="live-badge">HeyGen</div>
+                    <div class="avatar-overlay">
+                        <div class="avatar-name">Business Pro</div>
+                        <div class="avatar-role">Corporate communications</div>
+                    </div>
+                </div>
+
+                <!-- Avatar 3: Expert Support -->
+                <div class="avatar-card">
+                    <img src="avatars/avatar-3.png" alt="HeyGen AI Avatar - Expert Support">
+                    <div class="live-badge">HeyGen</div>
+                    <div class="avatar-overlay">
+                        <div class="avatar-name">Expert Support</div>
+                        <div class="avatar-role">Customer service & training</div>
+                    </div>
+                </div>
+
+                <!-- Avatar 4: Health & Wellness -->
+                <div class="avatar-card">
+                    <img src="avatars/avatar-4.png" alt="HeyGen AI Avatar - Health & Wellness">
+                    <div class="live-badge">HeyGen</div>
+                    <div class="avatar-overlay">
+                        <div class="avatar-name">Health & Wellness</div>
+                        <div class="avatar-role">Fitness & lifestyle content</div>
+                    </div>
+                </div>
+
+                <!-- Avatar 5: Executive -->
+                <div class="avatar-card">
+                    <img src="avatars/avatar-5.png" alt="HeyGen AI Avatar - Executive">
+                    <div class="live-badge">HeyGen</div>
+                    <div class="avatar-overlay">
+                        <div class="avatar-name">Executive</div>
+                        <div class="avatar-role">Leadership & presentations</div>
+                    </div>
+                </div>
+
+                <!-- Avatar 6: Tech & Education -->
+                <div class="avatar-card">
+                    <img src="avatars/avatar-6.png" alt="HeyGen AI Avatar - Tech & Education">
+                    <div class="live-badge">HeyGen</div>
+                    <div class="avatar-overlay">
+                        <div class="avatar-name">Tech & Education</div>
+                        <div class="avatar-role">Tutorials & onboarding</div>
+                    </div>
+                </div>
+            </div>
+
+            <p style="text-align: center; margin-top: 2.5rem; color: var(--text-secondary);">
+                At this workshop, you'll interact with avatars like these — <strong style="color: var(--cyan);">live and in real-time</strong>.
+            </p>
+        </div>
+    </section>
+
+    <!-- What You'll Learn -->
+    <section id="learn">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Workshop Curriculum</span>
+                <h2>What You'll Experience</h2>
+                <p>This isn't a lecture. You'll interact with live AI technology and leave with practical skills.</p>
+            </div>
+
+            <div class="learn-grid">
+                <div class="learn-item">
+                    <span class="learn-number">01</span>
+                    <div class="learn-content">
+                        <h4>Meet Your Digital Twin</h4>
+                        <p>Talk face-to-face with a real-time AI avatar that responds to your voice</p>
+                    </div>
+                </div>
+
+                <div class="learn-item">
+                    <span class="learn-number">02</span>
+                    <div class="learn-content">
+                        <h4>See Intelligent Avatars</h4>
+                        <p>Watch avatars that know who they're talking to and remember past conversations</p>
+                    </div>
+                </div>
+
+                <div class="learn-item">
+                    <span class="learn-number">03</span>
+                    <div class="learn-content">
+                        <h4>Watch Avatars Take Action</h4>
+                        <p>See how avatars book appointments, update CRMs, and trigger workflows</p>
+                    </div>
+                </div>
+
+                <div class="learn-item">
+                    <span class="learn-number">04</span>
+                    <div class="learn-content">
+                        <h4>Business Use Cases</h4>
+                        <p>Explore applications in sales, support, marketing, and content creation</p>
+                    </div>
+                </div>
+
+                <div class="learn-item">
+                    <span class="learn-number">05</span>
+                    <div class="learn-content">
+                        <h4>Create Your Own Avatar</h4>
+                        <p>Get hands-on guidance to start building your own digital twin</p>
+                    </div>
+                </div>
+
+                <div class="learn-item">
+                    <span class="learn-number">06</span>
+                    <div class="learn-content">
+                        <h4>Network & Connect</h4>
+                        <p>Meet other AI-curious professionals in the Indianapolis tech community</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Details -->
+    <section>
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Workshop Details</span>
+                <h2>When & Where</h2>
+            </div>
+
+            <div class="details-grid">
+                <div class="detail-card">
+                    <div class="detail-icon">📅</div>
+                    <div class="detail-label">Date</div>
+                    <div class="detail-value">Select Below</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">📍</div>
+                    <div class="detail-label">Location</div>
+                    <div class="detail-value">525 S Meridian St</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">⏱️</div>
+                    <div class="detail-label">Duration</div>
+                    <div class="detail-value">60 Minutes</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">💰</div>
+                    <div class="detail-label">Cost</div>
+                    <div class="detail-value highlight">FREE</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">🅿️</div>
+                    <div class="detail-label">Parking</div>
+                    <div class="detail-value">Free On-Site</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">☕</div>
+                    <div class="detail-label">Refreshments</div>
+                    <div class="detail-value">Provided</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who This Is For -->
+    <section>
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Is This For You?</span>
+                <h2>This Workshop Is Perfect If...</h2>
+            </div>
+
+            <div class="audience-list">
+                <div class="audience-item">
+                    <span class="audience-check">✓</span>
+                    <span>You're curious about AI but don't know where to start</span>
+                </div>
+                <div class="audience-item">
+                    <span class="audience-check">✓</span>
+                    <span>You want hands-on experience, not just theory</span>
+                </div>
+                <div class="audience-item">
+                    <span class="audience-check">✓</span>
+                    <span>You're looking to add AI skills to your resume</span>
+                </div>
+                <div class="audience-item">
+                    <span class="audience-check">✓</span>
+                    <span>You're exploring a career pivot into tech</span>
+                </div>
+                <div class="audience-item">
+                    <span class="audience-check">✓</span>
+                    <span>You're a business owner exploring AI applications</span>
+                </div>
+                <div class="audience-item">
+                    <span class="audience-check">✓</span>
+                    <span>You're a developer wanting to see cutting-edge AI</span>
+                </div>
+            </div>
+
+            <p style="text-align: center; margin-top: 2rem; color: var(--text-secondary);">
+                <strong style="color: var(--cyan);">No coding experience required.</strong>
+                No technical background needed. Just bring your curiosity.
+            </p>
+        </div>
+    </section>
+
+    <!-- About CyberHopeAI -->
+    <section>
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content">
+                    <span class="section-label" style="justify-content: flex-start;">About Your Host</span>
+                    <h2>Built in Indianapolis.<br><span class="gradient-text">Backed by Google.</span></h2>
+
+                    <p>
+                        <strong>CyberHopeAI</strong> is a technology company developing intelligent systems
+                        that connect AI to real business operations.
+                    </p>
+                    <p>
+                        We're part of <strong>Google for Startups</strong>, building on the cutting edge of
+                        real-time AI avatars, intelligent agents, and contextual memory systems.
+                    </p>
+                    <p>
+                        As an <strong>Official HeyGen Ambassador</strong>, we're authorized to demonstrate
+                        and train on the leading AI avatar platform in the world.
+                    </p>
+
+                    <div class="credentials-row">
+                        <div class="credential-badge">
+                            🚀 Google for Startups
+                        </div>
+                        <div class="credential-badge">
+                            🏆 HeyGen Ambassador
+                        </div>
+                        <div class="credential-badge">
+                            📍 Indianapolis, IN
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-visual">
+                    <div class="about-card">
+                        <div class="icon">🤖</div>
+                        <h3>The Intelligent Avatar</h3>
+                        <p class="tagline">
+                            "HeyGen makes avatars that look real.<br>
+                            <strong>We make avatars that think real.</strong>"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PrecognitionOS & SkillDNA Section -->
+    <section id="pcos" class="pcos-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Our Technology</span>
+                <h2>Built on <span class="gradient-text">PrecognitionOS</span></h2>
+                <p>CyberHopeAI is an AI technology development company building the future of intelligent systems.</p>
+            </div>
+
+            <div class="pcos-grid">
+                <div class="pcos-visual">
+                    <div class="pcos-diagram">
+                        <div class="diagram-title">The Intelligent Avatar Stack</div>
+                        <div class="pcos-stack">
+                            <div class="pcos-layer">
+                                <span class="layer-icon">🎭</span>
+                                <span>HeyGen — Realistic AI Avatars</span>
+                            </div>
+                            <div class="pcos-layer highlight">
+                                <span class="layer-icon">🧠</span>
+                                <span><strong>PrecognitionOS</strong> — The AI Brain</span>
+                            </div>
+                            <div class="pcos-layer">
+                                <span class="layer-icon">🧬</span>
+                                <span><strong>SkillDNA</strong> — Verified Skills</span>
+                            </div>
+                            <div class="pcos-layer">
+                                <span class="layer-icon">💼</span>
+                                <span>Business Data & CRM</span>
+                            </div>
+                            <div class="pcos-layer">
+                                <span class="layer-icon">⚡</span>
+                                <span>Automations & Workflows</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pcos-content">
+                    <div class="tech-badge">🧠 Proprietary Technology</div>
+                    <h2>PrecognitionOS<br><span style="font-size: 0.6em; color: var(--text-secondary);">+ SkillDNA</span></h2>
+
+                    <p>
+                        <strong>PrecognitionOS (PCOS)</strong> is the "brain" that makes AI avatars truly intelligent.
+                        While HeyGen creates photorealistic avatars, PCOS connects them to your business —
+                        enabling avatars that <strong>know who they're talking to</strong>, <strong>remember past conversations</strong>,
+                        and <strong>take real actions</strong>.
+                    </p>
+
+                    <p>
+                        <strong>SkillDNA</strong> is our professional identity platform — blockchain-verified credentials
+                        and AI-powered skill assessments that prove what you can actually do, not just what's on your resume.
+                    </p>
+
+                    <div class="pcos-features">
+                        <div class="pcos-feature">
+                            <span class="feature-icon">🎯</span>
+                            <div class="feature-text">
+                                <strong>Context Awareness</strong>
+                                Avatars know your customers by name
+                            </div>
+                        </div>
+                        <div class="pcos-feature">
+                            <span class="feature-icon">🔄</span>
+                            <div class="feature-text">
+                                <strong>Persistent Memory</strong>
+                                Every conversation builds on the last
+                            </div>
+                        </div>
+                        <div class="pcos-feature">
+                            <span class="feature-icon">🧬</span>
+                            <div class="feature-text">
+                                <strong>Verified Skills</strong>
+                                Prove your abilities with SkillDNA
+                            </div>
+                        </div>
+                        <div class="pcos-feature">
+                            <span class="feature-icon">🔗</span>
+                            <div class="feature-text">
+                                <strong>System Integration</strong>
+                                Connects to any business tool
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="https://skilldna.cyberhopeai.com/" target="_blank" class="btn btn-secondary" style="margin-top: 1.5rem;">
+                        Explore SkillDNA →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Form -->
+    <section id="register">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Limited Spots Available</span>
+                <h2>Reserve Your Spot</h2>
+                <p>Space is limited to ensure everyone gets hands-on time with the technology.</p>
+            </div>
+
+            <div class="form-section">
+                <form action="#" method="POST" id="registration-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstName">First Name <span class="required">*</span></label>
+                            <input type="text" id="firstName" name="firstName" required placeholder="John">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName">Last Name <span class="required">*</span></label>
+                            <input type="text" id="lastName" name="lastName" required placeholder="Smith">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address <span class="required">*</span></label>
+                            <input type="email" id="email" name="email" required placeholder="john@example.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number <span class="required">*</span></label>
+                            <input type="tel" id="phone" name="phone" required placeholder="(317) 555-1234">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company">Company/Organization</label>
+                            <input type="text" id="company" name="company" placeholder="Acme Inc.">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="role">Current Role</label>
+                            <select id="role" name="role">
+                                <option value="">Select your role...</option>
+                                <option value="business-owner">Business Owner / Entrepreneur</option>
+                                <option value="marketing-sales">Marketing / Sales Professional</option>
+                                <option value="developer">Developer / Technical</option>
+                                <option value="student">Student</option>
+                                <option value="career-changer">Career Changer</option>
+                                <option value="executive">Executive / Leadership</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="interest">What do you hope to learn?</label>
+                            <textarea id="interest" name="interest" rows="3" placeholder="I'm interested in learning about..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Calendar Embed -->
+                    <div class="calendar-embed">
+                        <p style="margin-bottom: 1rem;">📅 Select Your Preferred Date & Time</p>
+                        <!-- GHL Calendar Widget will be embedded here -->
+                        <p style="font-size: 0.75rem;">[GHL Calendar Embed]</p>
+                    </div>
+
+                    <div class="form-submit">
+                        <button type="submit" class="btn btn-primary">
+                            Register Now — It's Free →
+                        </button>
+                    </div>
+
+                    <p class="form-note">
+                        🔒 Your information is used only for workshop registration. We respect your privacy.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Partner: Hope Training Academy -->
+    <section id="hta" class="partner-section">
+        <div class="container">
+            <div class="partner-header">
+                <span class="section-label">Hosted by our nonprofit education partner</span>
+                <h2>Meet Our Host: <span class="gradient-text">Hope Training Academy</span></h2>
+            </div>
+
+            <div class="partner-grid">
+                <!-- About HTA -->
+                <div class="partner-main">
+                    <div class="partner-logo-row">
+                        <span class="partner-icon">🎓</span>
+                        <div>
+                            <h3>Hope Training Academy</h3>
+                            <span class="nonprofit-badge">501(c)(3) Nonprofit</span>
+                        </div>
+                    </div>
+
+                    <p>
+                        <strong>Hope Training Academy</strong> is committed to bridging the digital skills gap.
+                        They empower individuals through comprehensive training in high-demand fields like
+                        <strong>technology, IT, and cybersecurity</strong>, preparing them for the evolving job market.
+                    </p>
+
+                    <p>
+                        Their mission focuses on providing crucial training and apprenticeship opportunities,
+                        equipping students with the essential skills needed to thrive in new careers —
+                        especially those emerging from the <strong>AI revolution</strong>.
+                        They champion workforce development and community upliftment.
+                    </p>
+
+                    <div class="partner-programs">
+                        <h4>Training Programs Available</h4>
+                        <div class="program-list">
+                            <span class="program-tag"><span class="tag-icon">🔐</span> Cybersecurity</span>
+                            <span class="program-tag"><span class="tag-icon">💻</span> IT Fundamentals</span>
+                            <span class="program-tag"><span class="tag-icon">🤖</span> AI & Automation</span>
+                            <span class="program-tag"><span class="tag-icon">📊</span> Data Analytics</span>
+                            <span class="program-tag"><span class="tag-icon">🛠️</span> Registered Apprenticeships</span>
+                            <span class="program-tag"><span class="tag-icon">🌐</span> Online Courses</span>
+                            <span class="program-tag"><span class="tag-icon">🏫</span> In-Person Training</span>
+                        </div>
+                    </div>
+
+                    <a href="https://hopetrainingacademy.org/#training" target="_blank" rel="noopener" class="partner-link-btn">
+                        Explore HTA Programs →
+                    </a>
+                </div>
+
+                <!-- VIP Benefits -->
+                <div class="vip-benefits">
+                    <div class="vip-badge">⭐ Exclusive Offer</div>
+                    <h3>Exclusive Attendee Benefits!</h3>
+                    <p>
+                        As a thank you for joining our lab, all attendees will receive special
+                        <strong>VIP offers</strong> and access to custom training programs from
+                        Hope Training Academy, designed to accelerate your journey into the future of tech.
+                    </p>
+
+                    <ul class="vip-perks">
+                        <li>
+                            <span class="perk-icon">✓</span>
+                            <span><strong>Discounted course access</strong> — Special pricing on cybersecurity and IT training</span>
+                        </li>
+                        <li>
+                            <span class="perk-icon">✓</span>
+                            <span><strong>Priority enrollment</strong> — First access to new programs and cohorts</span>
+                        </li>
+                        <li>
+                            <span class="perk-icon">✓</span>
+                            <span><strong>Apprenticeship pathways</strong> — Direct connection to IT/Registered Apprenticeship opportunities</span>
+                        </li>
+                        <li>
+                            <span class="perk-icon">✓</span>
+                            <span><strong>Career support</strong> — Resume reviews and job placement assistance</span>
+                        </li>
+                    </ul>
+
+                    <!-- High School Student Callout -->
+                    <div class="hs-callout">
+                        <div class="callout-header">
+                            <span>🎒</span>
+                            <span>High School Students!</span>
+                        </div>
+                        <p>
+                            Indiana high school students may qualify for <strong>FREE training and apprenticeships</strong>
+                            through the CSA Program. See details below!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- CSA Program Feature -->
+                <div id="csa" class="csa-callout">
+                    <div class="csa-image">
+                        <img src="images/csa-apprentices.png" alt="Cyber Security Apprentices Wanted - Hope Training Academy CSA Program">
+                    </div>
+                    <div class="csa-content">
+                        <div class="csa-badge">🎓 Free for Indiana Students</div>
+                        <h3>Cyber Security Apprenticeships<br><span class="highlight">FREE for High School Students</span></h3>
+                        <p>
+                            Hope Training Academy's CSA Program offers <strong>FREE/zero-cost scholarships</strong> for
+                            Indiana high school students (grades 10-12) in public or private schools.
+                            This is a state-approved Tech Apprenticeship that counts toward Indiana's new graduation requirements.
+                        </p>
+
+                        <div class="csa-features">
+                            <span class="csa-feature"><span class="icon">🔐</span> Cybersecurity</span>
+                            <span class="csa-feature"><span class="icon">🎮</span> Video Game Development</span>
+                            <span class="csa-feature"><span class="icon">🤖</span> Artificial Intelligence</span>
+                            <span class="csa-feature"><span class="icon">📜</span> Industry Certifications</span>
+                            <span class="csa-feature"><span class="icon">💼</span> Paid Apprenticeships</span>
+                        </div>
+
+                        <p style="font-size: 0.875rem; margin-bottom: 1rem;">
+                            <strong>Available statewide</strong> — Enroll by October 1st<br>
+                            📞 317-349-HOPE (4673) or 833-209-HOPE
+                        </p>
+
+                        <a href="https://hopetrainingacademy.org/csa/" target="_blank" rel="noopener" class="csa-cta">
+                            Learn About CSA Program →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2 Kites Apprenticeships Section -->
+    <section id="2kites" class="kites-section">
+        <div class="container">
+            <div class="kites-grid">
+                <div class="kites-content">
+                    <div class="kites-badge">🪁 Apprenticeship Partner</div>
+                    <h2>Launch Your Career with<br><span class="gradient-text">2 Kites Apprenticeships</span></h2>
+
+                    <p>
+                        <strong>2 Kites</strong> is our workforce development partner connecting trained talent
+                        with employers through registered apprenticeship programs. After completing training,
+                        you can transition directly into paid apprenticeships with real companies.
+                    </p>
+
+                    <p>
+                        Apprenticeships combine on-the-job training with classroom learning, so you
+                        <strong>earn while you learn</strong> and build a career without the burden of student debt.
+                    </p>
+
+                    <ul class="kites-benefits">
+                        <li>
+                            <span class="benefit-icon">💰</span>
+                            <span><strong>Paid positions</strong> — Earn a salary from day one while learning</span>
+                        </li>
+                        <li>
+                            <span class="benefit-icon">📜</span>
+                            <span><strong>Industry certifications</strong> — Graduate with credentials employers want</span>
+                        </li>
+                        <li>
+                            <span class="benefit-icon">🤝</span>
+                            <span><strong>Employer connections</strong> — Direct pipeline to hiring companies</span>
+                        </li>
+                        <li>
+                            <span class="benefit-icon">🚀</span>
+                            <span><strong>Career advancement</strong> — Start entry-level, grow into leadership</span>
+                        </li>
+                    </ul>
+
+                    <a href="https://2kites.com" target="_blank" rel="noopener" class="kites-cta">
+                        Explore 2 Kites Apprenticeships →
+                    </a>
+                </div>
+
+                <div class="kites-visual">
+                    <div class="kites-card">
+                        <div class="card-icon">🔐</div>
+                        <div>
+                            <h4>Cybersecurity Apprentice</h4>
+                            <p>Protect organizations from digital threats</p>
+                        </div>
+                    </div>
+                    <div class="kites-card">
+                        <div class="card-icon">💻</div>
+                        <div>
+                            <h4>IT Support Specialist</h4>
+                            <p>Keep technology running smoothly</p>
+                        </div>
+                    </div>
+                    <div class="kites-card">
+                        <div class="card-icon">🤖</div>
+                        <div>
+                            <h4>AI Operations Technician</h4>
+                            <p>Deploy and manage AI systems</p>
+                        </div>
+                    </div>
+                    <div class="kites-card">
+                        <div class="card-icon">📊</div>
+                        <div>
+                            <h4>Data Analyst</h4>
+                            <p>Turn data into business insights</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Questions?</span>
+                <h2>Frequently Asked Questions</h2>
+            </div>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">Is this really free?</div>
+                    <div class="faq-answer">
+                        Yes, 100% free. CyberHopeAI is committed to accessible AI education.
+                        There's no upsell, no pitch at the end — just learning.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Do I need technical experience?</div>
+                    <div class="faq-answer">
+                        Not at all. This workshop is designed for anyone curious about AI, regardless
+                        of background. We explain everything in plain English.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">What's the catch?</div>
+                    <div class="faq-answer">
+                        No catch. We're building a community of AI-literate professionals in Indianapolis.
+                        The more people who understand this technology, the better for everyone.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Can I bring a colleague or friend?</div>
+                    <div class="faq-answer">
+                        Absolutely! Just have them register separately so we can plan for the
+                        right number of attendees.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Will there be more workshops?</div>
+                    <div class="faq-answer">
+                        Yes! This is the first in a series covering AI avatars, agents, automation,
+                        and prompt engineering. Register now to get first access to future workshops.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">What if I need to cancel?</div>
+                    <div class="faq-answer">
+                        No problem. Just reply to your confirmation email or text, and we'll
+                        help you reschedule to a future session.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="footer-cta">
+        <div class="container">
+            <h2>The Best Time to Learn AI Was Yesterday.<br><span class="gradient-text">The Second Best Time Is Now.</span></h2>
+            <p>AI skills are no longer optional. Join us for a free workshop and see what's possible.</p>
+            <a href="#register" class="btn btn-primary">
+                Reserve Your Free Spot →
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">Cyber<span>Hope</span>AI</div>
+                <div class="footer-links">
+                    <a href="mailto:rick@cyberhopeai.com">rick@cyberhopeai.com</a>
+                    <a href="tel:+13174606358">317-460-6358</a>
+                    <a href="https://skilldna.cyberhopeai.com">SkillDNA</a>
+                </div>
+                <p class="footer-copyright">
+                    © 2026 CyberHopeAI. Part of Google for Startups. Indianapolis, IN.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Smooth Scroll Script -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
